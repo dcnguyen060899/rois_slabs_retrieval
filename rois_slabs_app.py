@@ -50,7 +50,8 @@ import json
 
 # retrieve all the image_ids we have in the folder
 class roi_slabs(BaseModel):
-    """ Data Model for rois and slabs retrieval engine"""
+    """Data model for rois and slabs combination in the vector db"""
+
     slabs: str
     rois: str
 
@@ -79,6 +80,8 @@ index_vector_store = VectorStoreIndex.from_documents(
 
 roi_slab_engine = index_vector_store.as_query_engine(output_cls=roi_slabs)
 
+
+
 roi_slab_engine_tool = QueryEngineTool(
     query_engine=roi_slab_engine,  # Assuming roi_slab_engine is defined elsewhere and passed here as a parameter
     metadata=ToolMetadata(
@@ -106,7 +109,40 @@ roi_slab_engine_tool = QueryEngineTool(
     ),
 )
 
+
 agent = OpenAIAgent.from_tools(
+#   system_prompt = """
+# Given a user's request, translate it into a JSON format for a database query or data processing task related to medical imaging analysis. The request will typically specify a particular anatomical feature, measurement type, or data processing action in natural language.
+
+# If the user's request is vague or lacks specific details necessary for creating a structured JSON (e.g., the exact anatomical location or the region of interest (ROI) is not mentioned), you are to engage in a clarification process. Ask targeted follow-up questions to obtain the necessary details, such as the precise anatomical location and the specific ROI the user is interested in.
+
+# The primary task is to interpret the user's intent and convert it into a structured JSON format, identifying key components such as the target area, the type of data to be published, and any specific parameters related to data analysis. Ensure that anatomical locations are presented in lowercase and without spaces (e.g., "l5mid"), to match the vector database's output format.
+
+# Rules for translation and clarification:
+# 1. If the initial request is general (e.g., "I want to see skeletal muscle"), ask for clarification on the anatomical location (e.g., "Where would you like to see the skeletal muscle?").
+# 2. If the location is specified but not the ROI, ask for further clarification (e.g., "Which region of interest (ROI) for the skeletal muscle at L3 mid are you interested in?").
+# 3. Translate the detailed request into JSON, including fields for "slabs" (anatomical locations), "rois" (types of tissues or regions), and analysis parameters ("cross_sectional_area", "volume", "hu").
+
+# Example Clarification Process:
+# >>> User: "I want to see skeletal muscle."
+# >>> Agent: "Where would you like to see the skeletal muscle?"
+# >>> User: "L3 mid."
+# >>> Agent: "Which region of interest (ROI) for the skeletal muscle at L3 mid are you interested in?"
+# >>> User: "ALLSKM."
+
+# >>> Final JSON Output:
+# {
+#   "publish": {
+#     "slabs": "l3mid",
+#     "rois": "ALLSKM",
+#     "cross_sectional_area": "true",
+#     "volume": "true",
+#     "hu": "true"
+#   }
+# }
+
+# Your responses should guide the user through providing all necessary details for structuring their request into the JSON format shown in the final output.
+# """,
   system_prompt = """Agents are equipped with access to a comprehensive database that contains all possible combinations of "slabs" (anatomical locations) and "rois" (regions of interest), including specific measurement ranges when applicable. This database is an essential tool for correctly interpreting user requests and translating them into the required JSON format for medical imaging analysis database queries or data processing tasks.
 
 When a user makes a request, it is your responsibility to accurately map their description to the corresponding "slabs" and "rois" combination in the database. This includes recognizing specific anatomical features, such as "Visceral Adipose Tissue" (VAT) and measurement ranges (e.g., "-150, -50"), as well as anatomical locations like "sacrum."
