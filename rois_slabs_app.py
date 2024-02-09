@@ -245,6 +245,7 @@ if prompt:
 
    response = agent.chat(prompt)
    final_response = response.response
+   st.write(final_response)
    last_json_object = extract_last_json_object(final_response)
    final_response = json.dumps(last_json_object, indent=2)                    
    st.chat_message('assistant').markdown(final_response)
