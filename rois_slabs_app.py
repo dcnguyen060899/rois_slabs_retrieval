@@ -180,6 +180,12 @@ Finally, the system clarifies as needed, then produces a single JSON output refl
 # Create the Streamlit UI components
 st.title('👔 Rois-Slabs AI Gen 🧩')
 
+def extract_last_json_object(final_response):
+    json_objects = text.split('}\n{')
+    json_objects = [json_objects[0] + '}'] + ['{' + obj for obj in json_objects[1:]]
+    last_json_object = json.loads(json_objects[-1])
+    return last_json_object
+
 # Session state for holding messages
 if 'messages' not in st.session_state:
     st.session_state.messages = []
@@ -194,13 +200,7 @@ if prompt:
 
    response = agent.chat(prompt)
    final_response = response.response
-    def extract_last_json_object(final_response):
-        json_objects = text.split('}\n{')
-        json_objects = [json_objects[0] + '}'] + ['{' + obj for obj in json_objects[1:]]
-        last_json_object = json.loads(json_objects[-1])
-        return last_json_object
-    last_json_object = extract_last_json_object(response_text)
-    last_json_object
+    last_json_object = extract_last_json_object(final_response)
                        
    st.chat_message('assistant').markdown(last_json_object)
    st.session_state.messages.append({'role': 'assistant', 'content': last_json_object})
