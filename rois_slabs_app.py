@@ -46,6 +46,7 @@ from llama_index import set_global_service_context
 from llama_index import ServiceContext, VectorStoreIndex, SimpleDirectoryReader
 from llama_index.embeddings import OpenAIEmbedding
 from llama_index import set_global_service_context
+import json
 
 # retrieve all the image_ids we have in the folder
 class roi_slabs(BaseModel):
@@ -190,7 +191,17 @@ if prompt:
    # Directly query the OpenAI Agent
    st.chat_message('user').markdown(prompt)
    st.session_state.messages.append({'role': 'user', 'content': prompt})
+
    response = agent.chat(prompt)
    final_response = response.response
-   st.chat_message('assistant').markdown(final_response)
-   st.session_state.messages.append({'role': 'assistant', 'content': final_response})
+   def extract_last_json_object(final_response):
+       json_objects = text.split('}\n{')
+       json_objects = [json_objects[0] + '}'] + ['{' + obj for obj in json_objects[1:]]
+       last_json_object = json.loads(json_objects[-1])
+       return last_json_object
+       
+       last_json_object = extract_last_json_object(response_text)
+       last_json_object
+                       
+   st.chat_message('assistant').markdown(last_json_object)
+   st.session_state.messages.append({'role': 'assistant', 'content': last_json_object})
