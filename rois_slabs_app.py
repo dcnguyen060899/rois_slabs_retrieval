@@ -50,7 +50,6 @@ from llama_index import set_global_service_context
 
 # retrieve all the image_ids we have in the folder
 class roi_slabs(BaseModel):
-    """Data model for rois and slabs"""
     slabs: str
     rois: str
 
