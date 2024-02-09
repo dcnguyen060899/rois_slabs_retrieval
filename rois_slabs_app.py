@@ -1,5 +1,4 @@
 # dependencies
-"""
 import streamlit as st
 import os
 import sys
@@ -50,6 +49,7 @@ from llama_index import set_global_service_context
 
 # retrieve all the image_ids we have in the folder
 class roi_slabs(BaseModel):
+    """ Data Model for rois and slabs retrieval engine"""
     slabs: str
     rois: str
 
