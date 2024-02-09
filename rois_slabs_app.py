@@ -63,7 +63,7 @@ query_vector = [random.random() for _ in range(1536)]
 documents = reader.load_data(
     query_vector=query_vector,
     dataset_path="hub://dcnguyen060899/rois_slabs_db",
-    limit=5,
+    limit=1008,
 )
 
 dataset_path = 'rois_slabs_db'
