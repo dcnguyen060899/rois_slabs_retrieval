@@ -211,6 +211,7 @@ Finally, the system clarifies as needed, then produces a single JSON output refl
   tools=[
     roi_slab_engine_tool,
   ],
+    llm=llm,
   verbose=True)
 
 # Create the Streamlit UI components
