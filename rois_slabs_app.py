@@ -215,12 +215,22 @@ Finally, the system clarifies as needed, then produces a single JSON output refl
 # Create the Streamlit UI components
 st.title('👔 Rois-Slabs AI Gen 🧩')
 
-def extract_last_json_object(final_response):
-    json_objects = final_response.split('}\n{')
-    json_objects = [json_objects[0] + '}'] + ['{' + obj for obj in json_objects[1:]]
-    last_json_object = json.loads(json_objects[-1])
+def extract_last_json_object(response):
+    # Split the input string into potential JSON strings based on a separator (e.g., '}\n{')
+    json_strings = response.split('}\n{')
+    
+    # If there's more than one JSON object, we need to properly reformat the split strings
+    if len(json_strings) > 1:
+        # Add missing curly braces that were removed during splitting
+        json_strings = [s + '}' for s in json_strings[:-1]] + ['{' + json_strings[-1]]
+    else:
+        # If there's only one element, no need to modify it
+        json_strings = [response]
+    
+    # Parse the last JSON object
+    last_json_object = json.loads(json_strings[-1])
     return last_json_object
-
+    
 # Session state for holding messages
 if 'messages' not in st.session_state:
     st.session_state.messages = []
