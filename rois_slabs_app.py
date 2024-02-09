@@ -1,21 +1,18 @@
+# dependencies
+"""
 import streamlit as st
 import os
 import sys
 import openai
-
+# initialize open ai agent model
 openai.api_key = st.secrets["openai_api_key"]
 # os.environ["ACTIVELOOP_TOKEN"] = ''
 # Fetching secrets
 os.environ['ACTIVELOOP_TOKEN'] = st.secrets["active_loop_token"]
-
-INPUT_IMAGE_DIR = "/content/drive/MyDrive/Data Career/Voronoi Projects/user_input"
-os.makedirs(INPUT_IMAGE_DIR, exist_ok=True)
-
 # %%
 # Imports
 #
 from typing import List
-
 from llama_hub.tools.weather import OpenWeatherMapToolSpec
 from llama_index import (
     Document,
@@ -31,11 +28,9 @@ from llama_index.program import MultiModalLLMCompletionProgram
 from llama_index.tools import FunctionTool, QueryEngineTool, ToolMetadata
 from llama_index.vector_stores import DeepLakeVectorStore
 from pydantic import BaseModel
-
 from llama_index.readers.deeplake import DeepLakeReader
 import random
 from llama_index.storage.storage_context import StorageContext
-
 from typing import List, Tuple
 import deeplake
 from PIL import Image
@@ -44,13 +39,14 @@ import re
 import numpy as np
 from IPython.display import display
 import matplotlib.pyplot as plt
-from google.colab.patches import cv2_imshow
-import cv2
+# from google.colab.patches import cv2_imshow
+# import cv2
 import pandas as pd
 import ipywidgets as widgets
 from llama_index import set_global_service_context
 from llama_index import ServiceContext, VectorStoreIndex, SimpleDirectoryReader
 from llama_index.embeddings import OpenAIEmbedding
+from llama_index import set_global_service_context
 
 # retrieve all the image_ids we have in the folder
 class roi_slabs(BaseModel):
