@@ -237,5 +237,5 @@ if prompt:
    final_response = response.response
    last_json_object = extract_last_json_object(final_response)
                        
-   st.chat_message('assistant').markdown(final_response)
-   st.session_state.messages.append({'role': 'assistant', 'content': final_response})
+   st.chat_message('assistant').markdown(last_json_object)
+   st.session_state.messages.append({'role': 'assistant', 'content': last_json_object})
