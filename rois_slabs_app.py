@@ -194,12 +194,11 @@ if prompt:
 
    response = agent.chat(prompt)
    final_response = response.response
-   def extract_last_json_object(final_response):
-       json_objects = text.split('}\n{')
-       json_objects = [json_objects[0] + '}'] + ['{' + obj for obj in json_objects[1:]]
-       last_json_object = json.loads(json_objects[-1])
-       return last_json_object
-       
+    def extract_last_json_object(final_response):
+        json_objects = text.split('}\n{')
+        json_objects = [json_objects[0] + '}'] + ['{' + obj for obj in json_objects[1:]]
+        last_json_object = json.loads(json_objects[-1])
+        return last_json_object
     last_json_object = extract_last_json_object(response_text)
     last_json_object
                        
