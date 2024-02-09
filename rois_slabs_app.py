@@ -200,8 +200,8 @@ if prompt:
        last_json_object = json.loads(json_objects[-1])
        return last_json_object
        
-       last_json_object = extract_last_json_object(response_text)
-       last_json_object
+    last_json_object = extract_last_json_object(response_text)
+    last_json_object
                        
    st.chat_message('assistant').markdown(last_json_object)
    st.session_state.messages.append({'role': 'assistant', 'content': last_json_object})
